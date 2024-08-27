@@ -10,6 +10,8 @@ use Tests\TestCase;
 
 class ProductTest extends TestCase
 {
+    use RefreshDatabase;
+    
     public function test_unauthenticated_user_cannot_access_products_page(): void
     {
         $this->get(route('products.index'))
@@ -26,15 +28,15 @@ class ProductTest extends TestCase
     
     public function test_homepage_contains_non_empty_table(): void
     {
+        $user = User::factory()->create();
         $product = Product::create([
             'name' => 'Product 1',
             'price' => 123
         ]);
-        $user = User::factory()->create();
         
         $this->actingAs($user)->get(route('products.index'))
             ->assertStatus(200)
-            ->asssertDontSee('No products found')
+            ->assertDontSee('No products found')
             ->assertSee('Product 1')
             ->assertViewHas('products', function ($collection) use ($product) {
                 return $collection->contains($product);

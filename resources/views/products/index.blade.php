@@ -24,11 +24,20 @@
                             </thead>
 
                             <tbody class="bg-white divide-y divide-gray-200 divide-solid">
-                                <tr class="bg-white">
+                                @forelse($products as $product)
                                     <td colspan="2" class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                                        {{ __('No products found') }}
+                                        {{ $product->name }}
                                     </td>
-                                </tr>
+                                    <td colspan="2" class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                                        {{ $product->price }}
+                                    </td>
+                                @empty
+                                    <tr class="bg-white">
+                                        <td colspan="2" class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                                            {{ __('No products found') }}
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
