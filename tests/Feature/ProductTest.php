@@ -22,4 +22,21 @@ class ProductTest extends TestCase
             ->assertStatus(200)
             ->assertSee('No products found');
     }
+    
+    public function test_homepage_contains_non_empty_table(): void
+    {
+        $product = Product::create([
+            'name' => 'Product 1',
+            'price' => 123
+        ]);
+        $user = User::factory()->create();
+        
+        $this->actingAs($user)->get(route('products.index'))
+            ->assertStatus(200)
+            ->asssertDontSee('No products found')
+            ->assertSee('Product 1')
+            ->assertViewHas('products', function ($collection) use ($product) {
+                return $collection->contains($product);
+            });
+    }
 }
